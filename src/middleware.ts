@@ -2,7 +2,7 @@ import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
 
 export default withAuth(
-  function middleware(req) {
+  function middleware() {
     return NextResponse.next()
   },
   {
@@ -16,5 +16,6 @@ export default withAuth(
 )
 
 export const config = {
+  // Only protect dashboard routes — arena, instructions, skill.md, api are public
   matcher: ['/dashboard/:path*'],
 }

@@ -2,52 +2,82 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --bg-0: #0a0a0f;
-  --bg-1: #111118;
-  --bg-2: #18181f;
-  --bg-3: #1e1e27;
-  --border: #2a2a35;
-  --text-primary: #e8e8f0;
-  --text-secondary: #9898a8;
-  --accent: #4f8ef7;
+  --bg: #0d1321;
+  --bg-card: #131c2e;
+  --bg-card-hover: #172035;
+  --border: rgba(99, 152, 255, 0.12);
+  --border-strong: rgba(99, 152, 255, 0.25);
+  --blue: #4da6ff;
+  --blue-bright: #6fb8ff;
+  --text: #e8edf5;
+  --text-secondary: #8b97b0;
+  --text-muted: #4a5568;
+  --green: #3ecf8e;
+  --yellow: #f5a623;
+  --red: #f56565;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
-  background-color: var(--bg-0);
-  color: var(--text-primary);
+  background-color: var(--bg);
+  color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* Dashboard still uses old surface vars */
+.surface-0 { background-color: #0a0a0f; }
+.surface-1 { background-color: #111118; }
+.surface-2 { background-color: #18181f; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #2d3a52; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3d4f6e; }
+
+.font-mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-1);
+.card:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-card-hover);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #3a3a48;
-  border-radius: 3px;
+.link-blue {
+  color: var(--blue);
+  text-decoration: none;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #4a4a5a;
+.link-blue:hover {
+  color: var(--blue-bright);
+  text-decoration: underline;
 }
 
-.font-mono {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+code {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(77, 166, 255, 0.08);
+  border: 1px solid rgba(77, 166, 255, 0.15);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.85em;
+  color: #a8d4ff;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
 }

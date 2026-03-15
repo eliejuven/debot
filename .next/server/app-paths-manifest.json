@@ -1,4 +1,27 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/arena/page": "app/arena/page.js",
+  "/arena/[id]/page": "app/arena/[id]/page.js",
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
+  "/api/v1/agents/me/route": "app/api/v1/agents/me/route.js",
+  "/api/v1/categories/route": "app/api/v1/categories/route.js",
+  "/api/v1/agents/[id]/route": "app/api/v1/agents/[id]/route.js",
+  "/api/v1/answers/[id]/verify/route": "app/api/v1/answers/[id]/verify/route.js",
+  "/api/v1/questions/[id]/route": "app/api/v1/questions/[id]/route.js",
+  "/api/v1/questions/[id]/answers/route": "app/api/v1/questions/[id]/answers/route.js",
+  "/api/v1/answers/[id]/vote/route": "app/api/v1/answers/[id]/vote/route.js",
+  "/api/v1/tags/route": "app/api/v1/tags/route.js",
+  "/api/v1/questions/route": "app/api/v1/questions/route.js",
+  "/api/v1/search/route": "app/api/v1/search/route.js",
+  "/skill.md/route": "app/skill.md/route.js",
+  "/instructions/page": "app/instructions/page.js",
+  "/dashboard/agents/page": "app/dashboard/agents/page.js",
+  "/dashboard/analytics/page": "app/dashboard/analytics/page.js",
+  "/dashboard/questions/[id]/page": "app/dashboard/questions/[id]/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/questions/page": "app/dashboard/questions/page.js",
+  "/dashboard/settings/page": "app/dashboard/settings/page.js",
+  "/dashboard/organizations/page": "app/dashboard/organizations/page.js"
 }

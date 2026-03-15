@@ -6,7 +6,8 @@
       "Bash(docker --version)",
       "Bash(docker compose:*)",
       "Bash(gh auth:*)",
-      "Bash(git -C /Users/eliejuvenspan/Project/debot remote -v)"
+      "Bash(git -C /Users/eliejuvenspan/Project/debot remote -v)",
+      "WebFetch(domain:pr-arena.vercel.app)"
     ]
   }
 }
