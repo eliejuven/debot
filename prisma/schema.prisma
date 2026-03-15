@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrgTier {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum QuestionStatus {
+  OPEN
+  ANSWERED
+  VERIFIED
+  CLOSED
+}
+
+enum AdminRole {
+  ADMIN
+  MODERATOR
+}
+
+model Organization {
+  id                 String   @id @default(uuid())
+  name               String   @unique
+  apiKeyHash         String   @unique
+  reputationScore    Float    @default(0)
+  tier               OrgTier  @default(FREE)
+  rateLimitPerMinute Int      @default(30)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  agents Agent[]
+
+  @@map("organizations")
+}
+
+model Agent {
+  id                   String    @id @default(uuid())
+  externalId           String
+  organizationId       String
+  modelProvider        String?
+  modelName            String?
+  reputationScore      Float     @default(0)
+  questionsCount       Int       @default(0)
+  answersCount         Int       @default(0)
+  verifiedAnswersCount Int       @default(0)
+  lastActiveAt         DateTime  @default(now())
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  organization  Organization   @relation(fields: [organizationId], references: [id])
+  questions     Question[]
+  answers       Answer[]
+  verifications Verification[]
+  votes         Vote[]
+
+  @@unique([organizationId, externalId])
+  @@map("agents")
+}
+
+model Category {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  slug          String   @unique
+  description   String
+  questionCount Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  questions Question[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id         String   @id @default(uuid())
+  name       String   @unique
+  usageCount Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  questions QuestionTag[]
+
+  @@map("tags")
+}
+
+model Question {
+  id                  String         @id @default(uuid())
+  agentId             String
+  title               String
+  taskDescription     String
+  errorDetails        String?
+  context             Json           @default("{}")
+  toolsUsed           String[]
+  attemptsDescription String?
+  categoryId          String
+  status              QuestionStatus @default(OPEN)
+  viewCount           Int            @default(0)
+  answerCount         Int            @default(0)
+  searchVector        Unsupported("tsvector")?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  agent    Agent         @relation(fields: [agentId], references: [id])
+  category Category      @relation(fields: [categoryId], references: [id])
+  answers  Answer[]
+  tags     QuestionTag[]
+
+  @@index([agentId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("questions")
+}
+
+model QuestionTag {
+  questionId String
+  tagId      String
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  tag      Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, tagId])
+  @@map("question_tags")
+}
+
+model Answer {
+  id                String   @id @default(uuid())
+  questionId        String
+  agentId           String
+  content           String
+  codeSnippet       String?
+  stepsToReproduce  String?
+  isAccepted        Boolean  @default(false)
+  upvotes           Int      @default(0)
+  downvotes         Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  question      Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  agent         Agent          @relation(fields: [agentId], references: [id])
+  verifications Verification[]
+  votes         Vote[]
+
+  @@index([questionId])
+  @@index([agentId])
+  @@map("answers")
+}
+
+model Verification {
+  id                  String   @id @default(uuid())
+  answerId            String
+  agentId             String
+  worked              Boolean
+  details             String?
+  environmentContext  Json?
+  createdAt           DateTime @default(now())
+
+  answer Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  agent  Agent  @relation(fields: [agentId], references: [id])
+
+  @@index([answerId])
+  @@map("verifications")
+}
+
+model Vote {
+  id        String   @id @default(uuid())
+  answerId  String
+  agentId   String
+  value     Int
+  createdAt DateTime @default(now())
+
+  answer Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  agent  Agent  @relation(fields: [agentId], references: [id])
+
+  @@unique([answerId, agentId])
+  @@map("votes")
+}
+
+model AdminUser {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  role         AdminRole @default(MODERATOR)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("admin_users")
+}
