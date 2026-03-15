@@ -12,16 +12,16 @@ async function getAnalytics() {
     topOrgs,
   ] = await Promise.all([
     db.$queryRaw<Array<{ date: string; count: bigint }>>`
-      SELECT DATE(created_at)::text as date, COUNT(*)::bigint as count
+      SELECT DATE("createdAt")::text as date, COUNT(*)::bigint as count
       FROM questions
-      WHERE created_at > NOW() - INTERVAL '30 days'
-      GROUP BY DATE(created_at)
+      WHERE "createdAt" > NOW() - INTERVAL '30 days'
+      GROUP BY DATE("createdAt")
       ORDER BY date ASC
     `,
     db.$queryRaw<Array<{ name: string; count: bigint }>>`
       SELECT c.name, COUNT(q.id)::bigint as count
       FROM categories c
-      LEFT JOIN questions q ON q.category_id = c.id
+      LEFT JOIN questions q ON q."categoryId" = c.id
       GROUP BY c.id, c.name
       ORDER BY count DESC
     `,
@@ -38,21 +38,21 @@ async function getAnalytics() {
     db.$queryRaw<Array<{ total: bigint; with_answers: bigint }>>`
       SELECT
         COUNT(*)::bigint as total,
-        COUNT(CASE WHEN answer_count > 0 THEN 1 END)::bigint as with_answers
+        COUNT(CASE WHEN "answerCount" > 0 THEN 1 END)::bigint as with_answers
       FROM questions
     `,
     db.$queryRaw<Array<{ total: bigint; verified: bigint }>>`
       SELECT
         COUNT(*)::bigint as total,
-        COUNT(CASE WHEN is_accepted THEN 1 END)::bigint as verified
+        COUNT(CASE WHEN "isAccepted" THEN 1 END)::bigint as verified
       FROM answers
     `,
     db.$queryRaw<Array<{ avg_hours: number | null }>>`
-      SELECT AVG(EXTRACT(EPOCH FROM (a.created_at - q.created_at)) / 3600)::float as avg_hours
+      SELECT AVG(EXTRACT(EPOCH FROM (a."createdAt" - q."createdAt")) / 3600)::float as avg_hours
       FROM answers a
-      JOIN questions q ON a.question_id = q.id
-      WHERE a.created_at = (
-        SELECT MIN(a2.created_at) FROM answers a2 WHERE a2.question_id = q.id
+      JOIN questions q ON a."questionId" = q.id
+      WHERE a."createdAt" = (
+        SELECT MIN(a2."createdAt") FROM answers a2 WHERE a2."questionId" = q.id
       )
     `,
     db.$queryRaw<Array<{ name: string; questions: bigint; answers: bigint }>>`
@@ -61,9 +61,9 @@ async function getAnalytics() {
         COUNT(DISTINCT q.id)::bigint as questions,
         COUNT(DISTINCT ans.id)::bigint as answers
       FROM organizations o
-      LEFT JOIN agents ag ON ag.organization_id = o.id
-      LEFT JOIN questions q ON q.agent_id = ag.id
-      LEFT JOIN answers ans ON ans.agent_id = ag.id
+      LEFT JOIN agents ag ON ag."organizationId" = o.id
+      LEFT JOIN questions q ON q."agentId" = ag.id
+      LEFT JOIN answers ans ON ans."agentId" = ag.id
       GROUP BY o.id, o.name
       ORDER BY questions DESC
     `,

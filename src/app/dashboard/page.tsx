@@ -40,10 +40,10 @@ async function getMetrics() {
     }),
     // Questions per day last 30 days
     db.$queryRaw<Array<{ date: string; count: bigint }>>`
-      SELECT DATE(created_at)::text as date, COUNT(*)::bigint as count
+      SELECT DATE("createdAt")::text as date, COUNT(*)::bigint as count
       FROM questions
-      WHERE created_at > NOW() - INTERVAL '30 days'
-      GROUP BY DATE(created_at)
+      WHERE "createdAt" > NOW() - INTERVAL '30 days'
+      GROUP BY DATE("createdAt")
       ORDER BY date ASC
     `,
   ])
