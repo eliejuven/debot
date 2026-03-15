@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Environment (contains secrets)
+.env
+.env.local
+
+# Prisma
+prisma/migrations/.migrate
+
+# Build
+dist/
+build/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*

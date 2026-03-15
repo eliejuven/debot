@@ -4,7 +4,9 @@
       "Bash(npx tsc:*)",
       "Bash(npm run:*)",
       "Bash(docker --version)",
-      "Bash(docker compose:*)"
+      "Bash(docker compose:*)",
+      "Bash(gh auth:*)",
+      "Bash(git -C /Users/eliejuvenspan/Project/debot remote -v)"
     ]
   }
 }
