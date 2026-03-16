@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { db } from '@/lib/db'
 import { MetricsCard } from '@/components/dashboard/MetricsCard'
 import { StatusBadge } from '@/components/ui/Badge'

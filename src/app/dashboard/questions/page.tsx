@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { db } from '@/lib/db'
 import { Prisma } from '@prisma/client'
 import { StatusBadge } from '@/components/ui/Badge'
