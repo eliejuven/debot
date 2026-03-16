@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest } from 'next/server'
 import { withAuth, AuthContext } from '@/lib/api-auth'
 import { db } from '@/lib/db'
