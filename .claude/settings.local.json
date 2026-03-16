@@ -7,7 +7,8 @@
       "Bash(docker compose:*)",
       "Bash(gh auth:*)",
       "Bash(git -C /Users/eliejuvenspan/Project/debot remote -v)",
-      "WebFetch(domain:pr-arena.vercel.app)"
+      "WebFetch(domain:pr-arena.vercel.app)",
+      "Bash(pkill -f \"next dev\")"
     ]
   }
 }

@@ -2,82 +2,161 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
+/* ── Stack Overflow-style public theme ─────────────────── */
 :root {
-  --bg: #0d1321;
-  --bg-card: #131c2e;
-  --bg-card-hover: #172035;
-  --border: rgba(99, 152, 255, 0.12);
-  --border-strong: rgba(99, 152, 255, 0.25);
-  --blue: #4da6ff;
-  --blue-bright: #6fb8ff;
-  --text: #e8edf5;
-  --text-secondary: #8b97b0;
-  --text-muted: #4a5568;
-  --green: #3ecf8e;
-  --yellow: #f5a623;
-  --red: #f56565;
+  --so-bg:        #f8f9f9;
+  --so-white:     #ffffff;
+  --so-border:    #e3e6e8;
+  --so-orange:    #f48024;
+  --so-orange-d:  #da6f0e;
+  --so-blue:      #0074cc;
+  --so-blue-d:    #005999;
+  --so-text:      #232629;
+  --so-text-2:    #6a737c;
+  --so-text-3:    #9fa6ad;
+  --so-green:     #2f6f44;
+  --so-green-bg:  #2f6f44;
+  --so-tag-bg:    #e1ecf4;
+  --so-tag-text:  #39739d;
+  --so-tag-border:#39739d;
+  --so-yellow:    #fbf2d4;
+  --so-yellow-b:  #f1e5bc;
+  --so-red:       #d0393e;
 }
 
-* { box-sizing: border-box; }
+/* ── Dashboard dark theme ─────────────────────────────── */
+.dark-theme {
+  --bg-0: #0a0a0f;
+  --bg-1: #111118;
+  --bg-2: #18181f;
+  --bg-3: #1e1e27;
+  --bg-4: #252530;
+  --border-dark: #2a2a35;
+  --border-strong: #3a3a48;
+  --accent-blue: #4f8ef7;
+  --accent-green: #3ecf8e;
+  --accent-yellow: #f5a623;
+  --accent-red: #f44336;
+  --text-primary: #e8e8f0;
+  --text-secondary: #9898a8;
+  --text-muted: #5a5a70;
+}
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
 body {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--so-bg);
+  color: var(--so-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Dashboard still uses old surface vars */
-.surface-0 { background-color: #0a0a0f; }
-.surface-1 { background-color: #111118; }
-.surface-2 { background-color: #18181f; }
-
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #2d3a52; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #3d4f6e; }
-
-.font-mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
-
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+.dark-theme {
+  background: var(--bg-0);
+  color: var(--text-primary);
 }
 
-.card:hover {
-  border-color: var(--border-strong);
-  background: var(--bg-card-hover);
-}
+/* ── Typography ───────────────────────────────────────── */
+a { color: var(--so-blue); text-decoration: none; }
+a:hover { color: var(--so-blue-d); }
 
-.link-blue {
-  color: var(--blue);
-  text-decoration: none;
-}
-
-.link-blue:hover {
-  color: var(--blue-bright);
-  text-decoration: underline;
-}
-
-code {
-  font-family: 'JetBrains Mono', monospace;
-  background: rgba(77, 166, 255, 0.08);
-  border: 1px solid rgba(77, 166, 255, 0.15);
-  border-radius: 4px;
-  padding: 1px 6px;
+code, .font-mono {
+  font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
   font-size: 0.85em;
-  color: #a8d4ff;
 }
 
+/* Inline code */
+:not(pre) > code {
+  background: #eff0f1;
+  border: 1px solid #e3e6e8;
+  border-radius: 3px;
+  padding: 2px 5px;
+  color: var(--so-text);
+  font-size: 0.82em;
+}
+
+/* Code blocks */
+pre {
+  background: #1c1b1b;
+  color: #e0e0e0;
+  border-radius: 5px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.82em;
+  line-height: 1.6;
+}
 pre code {
   background: none;
   border: none;
   padding: 0;
-  font-size: inherit;
   color: inherit;
+  font-size: inherit;
 }
+
+/* ── SO Tag pill ─────────────────────────────────────── */
+.so-tag {
+  display: inline-flex;
+  align-items: center;
+  background: var(--so-tag-bg);
+  color: var(--so-tag-text);
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+.so-tag:hover {
+  background: #d0e3f1;
+  color: var(--so-tag-text);
+}
+
+/* ── SO Button ───────────────────────────────────────── */
+.so-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--so-orange);
+  color: white;
+  border: 1px solid var(--so-orange-d);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.1s;
+  text-decoration: none;
+}
+.so-btn:hover { background: var(--so-orange-d); color: white; }
+.so-btn-secondary {
+  background: white;
+  color: var(--so-blue);
+  border-color: var(--so-border);
+}
+.so-btn-secondary:hover { background: #f0f8ff; color: var(--so-blue-d); }
+
+/* ── SO Card / Panel ─────────────────────────────────── */
+.so-card {
+  background: var(--so-white);
+  border: 1px solid var(--so-border);
+  border-radius: 5px;
+}
+
+/* ── Scrollbar ───────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #c8ccd0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a0a4a8; }
+
+/* ── Dashboard scrollbar ─────────────────────────────── */
+.dark-theme ::-webkit-scrollbar-track { background: #111118; }
+.dark-theme ::-webkit-scrollbar-thumb { background: #3a3a48; }
