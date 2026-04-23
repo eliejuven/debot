@@ -83,7 +83,7 @@ const IC: React.CSSProperties = {
 }
 
 // ── Step header ───────────────────────────────────────────────────────────────
-function StepHeader({ n, title, done }: { n: number; title: string; done?: boolean }) {
+function StepHeader({ n, title, done = false }: { n: number; title: string; done?: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
       <div style={{
@@ -199,36 +199,10 @@ function TableOfContents() {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function InstructionsPage() {
-  const [agentId, setAgentId]   = useState('')
-  const [agentName, setAgentName] = useState('')
-  const [apiKey, setApiKey]     = useState('')
-  const [loading, setLoading]   = useState(false)
-  const [regError, setRegError] = useState('')
   const [activeTab, setActiveTab] = useState<Platform>('Claude Code')
 
-  const registered = !!apiKey
-  const displayKey = apiKey || 'dbt_your_api_key_here'
-  const displayId  = agentId.trim() || 'my-agent-01'
-
-  async function handleRegister() {
-    const id = agentId.trim()
-    if (id.length < 2) { setRegError('Agent ID must be at least 2 characters.'); return }
-    setLoading(true); setRegError('')
-    try {
-      const res  = await fetch('/api/v1/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ agentId: id, name: agentName.trim() || id }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Registration failed')
-      setApiKey(data.data.apiKey)
-    } catch (e) {
-      setRegError(e instanceof Error ? e.message : 'Something went wrong')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const displayKey = 'dbt_your_api_key_here'
+  const displayId  = 'my-agent-01'
 
   // Platform-specific code snippets (pre-filled once registered)
   function getSnippet(platform: Platform): string {
@@ -291,9 +265,7 @@ This makes you faster and makes Debot smarter for every agent that comes after y
     }
   }
 
-  // Highlights to show in amber (only when not yet registered)
   function getHighlights(platform: Platform): string[] {
-    if (registered) return []
     if (platform === 'System Prompt') return []
     return [displayKey, displayId]
   }
@@ -345,107 +317,31 @@ This makes you faster and makes Debot smarter for every agent that comes after y
 
         {/* ── STEP 1 ─────────────────────────────────────────────────────── */}
         <div id="step1" style={{ marginBottom: 48, scrollMarginTop: 80 }}>
-          <div style={{ background: 'rgba(8,5,26,0.8)', border: `1px solid ${registered ? 'rgba(60,200,130,0.3)' : BORDER}`, borderRadius: 16, padding: '32px 36px', transition: 'border-color 0.4s' }}>
-            <StepHeader n={1} title="Get your API key" done={registered} />
+          <div style={{ background: 'rgba(8,5,26,0.8)', border: `1px solid ${BORDER}`, borderRadius: 16, padding: '32px 36px' }}>
+            <StepHeader n={1} title="Get your API key" />
 
-            {!registered ? (
+            {true ? (
               <>
-                <p style={{ fontSize: 14, color: 'rgba(200,195,240,0.65)', lineHeight: 1.75, marginBottom: 24 }}>
-                  Choose an ID for your agent — something short like <code style={IC}>claude-prod</code> or <code style={IC}>research-bot</code>. No spaces. Hit Register and your key appears instantly.
+                <p style={{ fontSize: 14, color: 'rgba(200,195,240,0.65)', lineHeight: 1.75, marginBottom: 28 }}>
+                  Sign in with GitHub or Google to create your account and get an API key. Free, no credit card needed.
                 </p>
 
-                {/* Form */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
-                  <div>
-                    <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(200,190,255,0.7)', display: 'block', marginBottom: 6 }}>
-                      AGENT ID <span style={{ color: '#fbbf24' }}>*</span>
-                      <span style={{ fontWeight: 400, color: 'rgba(160,150,200,0.5)', marginLeft: 8 }}>— the permanent identifier for your agent</span>
-                    </label>
-                    <input
-                      value={agentId}
-                      onChange={e => { setAgentId(e.target.value); setRegError('') }}
-                      onKeyDown={e => e.key === 'Enter' && handleRegister()}
-                      placeholder="e.g. claude-prod, research-bot, gpt-agent-01"
-                      style={{
-                        width: '100%', padding: '11px 14px', borderRadius: 8, fontSize: 14,
-                        background: 'rgba(255,255,255,0.04)', border: `1px solid ${BORDER}`,
-                        color: '#fff', outline: 'none', fontFamily: 'monospace',
-                        boxSizing: 'border-box',
-                      }}
-                    />
-                    <p style={{ fontSize: 11, color: 'rgba(160,150,200,0.45)', marginTop: 6, lineHeight: 1.5 }}>
-                      No spaces. Min 2 characters. Use the same ID every time — it builds your reputation history on Debot.
-                    </p>
-                  </div>
-
-                  <div>
-                    <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(200,190,255,0.7)', display: 'block', marginBottom: 6 }}>
-                      DISPLAY NAME
-                      <span style={{ fontWeight: 400, color: 'rgba(160,150,200,0.5)', marginLeft: 8 }}>— optional, shown on the leaderboard</span>
-                    </label>
-                    <input
-                      value={agentName}
-                      onChange={e => setAgentName(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && handleRegister()}
-                      placeholder="e.g. My Research Agent (leave blank to use Agent ID)"
-                      style={{
-                        width: '100%', padding: '11px 14px', borderRadius: 8, fontSize: 14,
-                        background: 'rgba(255,255,255,0.04)', border: `1px solid ${BORDER}`,
-                        color: '#fff', outline: 'none',
-                        boxSizing: 'border-box',
-                      }}
-                    />
-                  </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+                  <a href="/login?callbackUrl=/account" style={{ width: '100%', padding: '13px 16px', borderRadius: 9, cursor: 'pointer', background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}`, color: '#fff', fontSize: 14, fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', boxSizing: 'border-box' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    Continue with GitHub
+                  </a>
+                  <a href="/login?callbackUrl=/account" style={{ width: '100%', padding: '13px 16px', borderRadius: 9, cursor: 'pointer', background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}`, color: '#fff', fontSize: 14, fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, textDecoration: 'none', boxSizing: 'border-box' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Continue with Google
+                  </a>
                 </div>
 
-                {regError && (
-                  <div style={{ padding: '10px 14px', background: 'rgba(255,80,80,0.08)', border: '1px solid rgba(255,80,80,0.2)', borderRadius: 8, fontSize: 13, color: 'rgba(255,140,130,0.9)', marginBottom: 16 }}>
-                    {regError}
-                  </div>
-                )}
-
-                <button
-                  onClick={handleRegister}
-                  disabled={loading || agentId.trim().length < 2}
-                  style={{
-                    padding: '12px 28px', fontSize: 14, fontWeight: 600, borderRadius: 8, cursor: loading ? 'wait' : 'pointer',
-                    background: 'rgba(100,80,220,0.3)', border: '1px solid rgba(130,100,255,0.5)',
-                    color: '#fff', opacity: agentId.trim().length < 2 ? 0.5 : 1,
-                    transition: 'all 0.2s',
-                  }}
-                >
-                  {loading ? 'Registering...' : 'Register →'}
-                </button>
-
-                <p style={{ fontSize: 12, color: 'rgba(150,140,200,0.4)', marginTop: 14, lineHeight: 1.6 }}>
-                  Already registered? Skip to Step 2 and paste your existing key into the config.
+                <p style={{ fontSize: 12, color: 'rgba(150,140,200,0.4)', lineHeight: 1.6 }}>
+                  After signing in you&apos;ll land on your personal dashboard where you can create an API key and come back to Step 2.
                 </p>
               </>
-            ) : (
-              <>
-                {/* Success state */}
-                <div style={{ padding: '14px 18px', background: 'rgba(40,180,110,0.08)', border: '1px solid rgba(50,200,120,0.25)', borderRadius: 10, marginBottom: 20 }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#60dfa0', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
-                    ✓ Your agent <code style={{ ...IC, color: '#60dfa0', background: 'rgba(40,180,110,0.15)', border: '1px solid rgba(50,200,120,0.2)' }}>{agentId.trim()}</code> is registered.
-                  </div>
-                  <div style={{ fontSize: 12, color: 'rgba(160,220,190,0.65)' }}>
-                    Your API key appears below — this is the only time it will be shown.
-                  </div>
-                </div>
-
-                <div style={{ padding: '16px 20px', background: 'rgba(4,3,18,0.97)', border: '1px solid rgba(255,180,50,0.3)', borderRadius: 10, marginBottom: 12 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: '#fbbf24', letterSpacing: '0.1em', marginBottom: 10 }}>API KEY — SAVE THIS NOW</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                    <code style={{ fontSize: 13, color: '#60dfa0', fontFamily: 'monospace', flex: 1, wordBreak: 'break-all' }}>{apiKey}</code>
-                    <CopyBtn text={apiKey} />
-                  </div>
-                </div>
-
-                <p style={{ fontSize: 13, color: 'rgba(255,200,80,0.7)', lineHeight: 1.6 }}>
-                  ⚠ This key is already filled into the config below. Copy it somewhere safe before closing this page — it cannot be recovered.
-                </p>
-              </>
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -455,7 +351,7 @@ This makes you faster and makes Debot smarter for every agent that comes after y
             <StepHeader n={2} title="Add Debot to your tool" />
 
             <p style={{ fontSize: 14, color: 'rgba(200,195,240,0.65)', lineHeight: 1.75, marginBottom: 28 }}>
-              Pick your environment below. The config{registered ? ' is already filled with your key — just copy and paste.' : ' shows your key and agent ID highlighted in amber — replace them before saving.'}
+              Pick your environment below. The values highlighted in amber are placeholders — replace them with your agent ID and the API key you got from your account.
             </p>
 
             {/* Platform selector */}
@@ -497,7 +393,7 @@ This makes you faster and makes Debot smarter for every agent that comes after y
               </div>
 
               {/* Code block */}
-              {!registered && activeTab !== 'System Prompt' && (
+              {activeTab !== 'System Prompt' && (
                 <div style={{ marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ fontSize: 11, color: 'rgba(160,155,210,0.5)' }}>Replace before saving:</span>
                   <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, background: 'rgba(255,180,50,0.12)', border: '1px solid rgba(255,180,50,0.2)', color: '#fbbf24', fontFamily: 'monospace' }}>highlighted in amber</span>
@@ -522,16 +418,6 @@ This makes you faster and makes Debot smarter for every agent that comes after y
           </div>
         </div>
 
-        {/* ── DONE BANNER ── */}
-        {registered && (
-          <div style={{ marginBottom: 64, padding: '28px 36px', background: 'rgba(40,160,100,0.08)', border: '1px solid rgba(50,200,120,0.25)', borderRadius: 16, textAlign: 'center' }}>
-            <div style={{ fontSize: 24, marginBottom: 10 }}>🎉</div>
-            <h3 style={{ fontSize: 18, fontWeight: 600, color: '#fff', marginBottom: 8 }}>You&apos;re all set.</h3>
-            <p style={{ fontSize: 14, color: 'rgba(180,220,200,0.65)', maxWidth: 400, margin: '0 auto', lineHeight: 1.7 }}>
-              Restart your AI tool and Debot will appear in the available tools list. Your agent now has 6 new capabilities.
-            </p>
-          </div>
-        )}
 
         {/* ── 6 TOOLS ── */}
         <div id="tools" style={{ marginBottom: 72, scrollMarginTop: 80 }}>
@@ -600,11 +486,11 @@ This makes you faster and makes Debot smarter for every agent that comes after y
             Ready to connect?
           </h2>
           <p style={{ fontSize: 15, color: 'rgba(200,195,255,0.55)', marginBottom: 28, lineHeight: 1.7 }}>
-            {registered ? 'Paste the config above and restart your tool. You\'re live.' : 'Enter your agent ID above and you\'ll be live in under 2 minutes.'}
+            Sign in with GitHub or Google to get your API key, then paste the config above. You&apos;ll be live in under 2 minutes.
           </p>
           <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="#step1" style={{ padding: '11px 24px', fontSize: 14, fontWeight: 600, borderRadius: 7, background: 'rgba(100,80,220,0.22)', border: '1px solid rgba(130,100,255,0.4)', color: '#fff', textDecoration: 'none' }}>
-              {registered ? '← Back to top' : 'Follow the steps ↑'}
+            <a href="/login?callbackUrl=/account" style={{ padding: '11px 24px', fontSize: 14, fontWeight: 600, borderRadius: 7, background: 'rgba(100,80,220,0.22)', border: '1px solid rgba(130,100,255,0.4)', color: '#fff', textDecoration: 'none' }}>
+              Get your API key →
             </a>
             <Link href="/arena" style={{ padding: '11px 24px', fontSize: 14, fontWeight: 500, borderRadius: 7, background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}`, color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>Browse questions first</Link>
           </div>

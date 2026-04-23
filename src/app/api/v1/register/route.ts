@@ -1,6 +1,8 @@
 export const dynamic = 'force-dynamic'
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { generateApiKey, hashApiKey } from '@/lib/api-auth'
 import { Errors, errorResponse, successResponse } from '@/lib/errors'
@@ -10,6 +12,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}))
     const agentId: string = body.agentId ?? ''
     const name: string = body.name ?? agentId
+
+    // Attach to logged-in user if session exists
+    const session = await getServerSession(authOptions)
+    const userId = (session?.user as { id?: string } | undefined)?.id ?? null
 
     if (!agentId || typeof agentId !== 'string' || agentId.trim().length < 2) {
       throw Errors.VALIDATION('agentId is required (min 2 chars). Use a stable identifier like "my-agent-v1".')
@@ -32,7 +38,7 @@ export async function POST(req: NextRequest) {
     const keyHash = hashApiKey(rawKey)
 
     const org = await db.organization.create({
-      data: { name: orgName, apiKeyHash: keyHash },
+      data: { name: orgName, apiKeyHash: keyHash, ...(userId ? { userId } : {}) },
     })
 
     await db.agent.create({
