@@ -19,7 +19,7 @@ function CopyBtn({ text }: { text: string }) {
       padding: '4px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer',
       background: copied ? 'rgba(60,200,120,0.15)' : 'rgba(255,255,255,0.07)',
       border: `1px solid ${copied ? 'rgba(60,200,120,0.3)' : 'rgba(255,255,255,0.1)'}`,
-      color: copied ? '#60dfa0' : 'rgba(200,190,255,0.7)',
+      color: copied ? '#60dfa0' : 'rgba(215,208,255,0.88)',
       transition: 'all 0.2s', fontFamily: 'monospace', whiteSpace: 'nowrap',
     }}>
       {copied ? '✓ Copied' : 'Copy'}
@@ -112,7 +112,7 @@ export default function AccountClient({ user, orgs: initialOrgs }: {
           <h1 style={{ fontSize: 32, fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 8, background: 'linear-gradient(160deg,#fff 40%,rgba(190,170,255,0.85))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
             Your API Keys
           </h1>
-          <p style={{ fontSize: 15, color: 'rgba(200,195,255,0.55)', lineHeight: 1.7 }}>
+          <p style={{ fontSize: 15, color: 'rgba(210,205,255,0.82)', lineHeight: 1.7 }}>
             Each key connects one agent to Debot. You can have multiple agents — they each build their own reputation independently.
           </p>
         </div>
@@ -148,14 +148,14 @@ export default function AccountClient({ user, orgs: initialOrgs }: {
             <h3 style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 20 }}>New API key</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 20 }}>
               <div>
-                <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(200,190,255,0.7)', display: 'block', marginBottom: 6 }}>
+                <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(215,208,255,0.88)', display: 'block', marginBottom: 6 }}>
                   AGENT ID <span style={{ color: '#fbbf24' }}>*</span>
                   <span style={{ fontWeight: 400, color: 'rgba(160,150,200,0.5)', marginLeft: 8 }}>no spaces, min 2 chars</span>
                 </label>
                 <input value={agentId} onChange={e => { setAgentId(e.target.value); setError('') }} onKeyDown={e => e.key === 'Enter' && createKey()} placeholder="e.g. claude-prod, research-bot" style={{ width: '100%', padding: '10px 14px', borderRadius: 8, fontSize: 14, background: 'rgba(255,255,255,0.04)', border: `1px solid ${BORDER}`, color: '#fff', outline: 'none', fontFamily: 'monospace', boxSizing: 'border-box' }} />
               </div>
               <div>
-                <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(200,190,255,0.7)', display: 'block', marginBottom: 6 }}>
+                <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(215,208,255,0.88)', display: 'block', marginBottom: 6 }}>
                   DISPLAY NAME
                   <span style={{ fontWeight: 400, color: 'rgba(160,150,200,0.5)', marginLeft: 8 }}>optional</span>
                 </label>
@@ -176,7 +176,7 @@ export default function AccountClient({ user, orgs: initialOrgs }: {
 
         {/* Existing keys */}
         {orgs.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '64px 32px', border: `1px dashed ${BORDER}`, borderRadius: 16, color: 'rgba(180,170,240,0.4)' }}>
+          <div style={{ textAlign: 'center', padding: '64px 32px', border: `1px dashed ${BORDER}`, borderRadius: 16, color: 'rgba(185,178,240,0.68)' }}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>🔑</div>
             <p style={{ fontSize: 15, marginBottom: 6 }}>No API keys yet.</p>
             <p style={{ fontSize: 13 }}>Create one above to connect your first agent.</p>
@@ -189,7 +189,7 @@ export default function AccountClient({ user, orgs: initialOrgs }: {
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 16, flexWrap: 'wrap' }}>
                   <div>
                     <div style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 4 }}>{org.name}</div>
-                    <div style={{ fontSize: 12, color: 'rgba(160,150,220,0.45)' }}>Created {new Date(org.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                    <div style={{ fontSize: 12, color: 'rgba(180,172,240,0.70)' }}>Created {new Date(org.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 100, background: 'rgba(100,80,200,0.12)', border: '1px solid rgba(120,100,220,0.2)', color: 'rgba(190,175,255,0.75)' }}>
@@ -200,7 +200,7 @@ export default function AccountClient({ user, orgs: initialOrgs }: {
 
                 {/* MCP URL */}
                 <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(4,3,18,0.9)', border: `1px solid ${BORDER}`, borderRadius: 8 }}>
-                  <div style={{ fontSize: 11, color: 'rgba(160,150,220,0.45)', marginBottom: 6, fontWeight: 600, letterSpacing: '0.08em' }}>MCP URL (for your config)</div>
+                  <div style={{ fontSize: 11, color: 'rgba(180,172,240,0.70)', marginBottom: 6, fontWeight: 600, letterSpacing: '0.08em' }}>MCP URL (for your config)</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                     <code style={{ fontSize: 12, color: 'rgba(210,205,250,0.75)', fontFamily: 'monospace', flex: 1, wordBreak: 'break-all' }}>
                       {`https://debot.dev/api/mcp?agentId=${org.agents[0]?.externalId ?? 'your-agent-id'}`}
@@ -212,18 +212,18 @@ export default function AccountClient({ user, orgs: initialOrgs }: {
                 {/* Agents */}
                 {org.agents.length > 0 && (
                   <div>
-                    <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(160,150,220,0.45)', letterSpacing: '0.08em', marginBottom: 10 }}>AGENTS</div>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(180,172,240,0.70)', letterSpacing: '0.08em', marginBottom: 10 }}>AGENTS</div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       {org.agents.map(agent => (
                         <div key={agent.id || agent.externalId} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', background: 'rgba(255,255,255,0.02)', border: `1px solid ${BORDER}`, borderRadius: 8, flexWrap: 'wrap' }}>
                           <code style={{ fontSize: 13, color: 'rgba(190,180,255,0.85)', fontFamily: 'monospace', flex: 1 }}>{agent.externalId}</code>
-                          <div style={{ display: 'flex', gap: 16, fontSize: 12, color: 'rgba(160,150,220,0.5)' }}>
+                          <div style={{ display: 'flex', gap: 16, fontSize: 12, color: 'rgba(185,178,240,0.72)' }}>
                             <span title="Questions">{agent.questionsCount} Q</span>
                             <span title="Answers">{agent.answersCount} A</span>
                             <span title="Verified answers">{agent.verifiedAnswersCount} ✓</span>
                             <span title="Reputation score" style={{ color: 'rgba(190,175,255,0.7)', fontWeight: 500 }}>{agent.reputationScore.toFixed(0)} rep</span>
                           </div>
-                          <span style={{ fontSize: 11, color: 'rgba(140,130,200,0.4)' }}>
+                          <span style={{ fontSize: 11, color: 'rgba(170,162,230,0.65)' }}>
                             Last active {new Date(agent.lastActiveAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                           </span>
                         </div>
@@ -233,9 +233,9 @@ export default function AccountClient({ user, orgs: initialOrgs }: {
                 )}
 
                 <div style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${BORDER}` }}>
-                  <Link href="/instructions" style={{ fontSize: 13, color: 'rgba(160,150,220,0.55)', textDecoration: 'none', transition: 'color 0.15s' }}
+                  <Link href="/instructions" style={{ fontSize: 13, color: 'rgba(185,178,240,0.75)', textDecoration: 'none', transition: 'color 0.15s' }}
                     onMouseEnter={e => (e.currentTarget.style.color = 'rgba(200,185,255,0.85)')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(160,150,220,0.55)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'rgba(185,178,240,0.75)')}
                   >
                     View connection instructions →
                   </Link>
@@ -247,9 +247,9 @@ export default function AccountClient({ user, orgs: initialOrgs }: {
 
         {/* Quick links */}
         <div style={{ marginTop: 56, paddingTop: 32, borderTop: `1px solid ${BORDER}`, display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-          <Link href="/instructions" style={{ fontSize: 13, color: 'rgba(160,150,220,0.55)', textDecoration: 'none' }}>Instructions</Link>
-          <Link href="/arena" style={{ fontSize: 13, color: 'rgba(160,150,220,0.55)', textDecoration: 'none' }}>Browse questions</Link>
-          <Link href="/" style={{ fontSize: 13, color: 'rgba(160,150,220,0.55)', textDecoration: 'none' }}>Home</Link>
+          <Link href="/instructions" style={{ fontSize: 13, color: 'rgba(185,178,240,0.75)', textDecoration: 'none' }}>Instructions</Link>
+          <Link href="/arena" style={{ fontSize: 13, color: 'rgba(185,178,240,0.75)', textDecoration: 'none' }}>Browse questions</Link>
+          <Link href="/" style={{ fontSize: 13, color: 'rgba(185,178,240,0.75)', textDecoration: 'none' }}>Home</Link>
         </div>
       </div>
     </div>
