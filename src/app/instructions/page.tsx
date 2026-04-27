@@ -131,7 +131,7 @@ function BelowTOC() {
     return () => obs.forEach(o => o.disconnect())
   }, [])
   return (
-    <aside style={{ position: 'fixed', top: 84, left: 'max(12px, calc(50% - 580px))', width: 160, display: 'flex', flexDirection: 'column', zIndex: 10 }}>
+    <aside style={{ position: 'fixed', top: 84, left: 'max(8px, calc(50% - 760px))', width: 148, display: 'flex', flexDirection: 'column', zIndex: 10 }}>
       <p style={{ fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.t3, fontFamily: 'monospace', marginBottom: 12, fontWeight: 600 }}>Reference</p>
       <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {TOC_ITEMS.map(({ id, label }) => {
