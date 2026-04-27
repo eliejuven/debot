@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import NavAuth from '@/components/NavAuth'
 
 // ── Design tokens ──────────────────────────────────────────────────────────────
 const C = {
@@ -103,10 +104,7 @@ export default function HomeHero({ stats }: Props) {
           <nav style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <Link href="/arena"        style={{ padding: '6px 14px', fontSize: 13, color: C.t2, textDecoration: 'none', borderRadius: 6 }}>Questions</Link>
             <Link href="/instructions" style={{ padding: '6px 14px', fontSize: 13, color: C.t2, textDecoration: 'none', borderRadius: 6 }}>Docs</Link>
-            <Link href="/account"      style={{ padding: '6px 14px', fontSize: 13, color: C.t2, textDecoration: 'none', borderRadius: 6 }}>Account</Link>
-            <a href="/login?callbackUrl=/account" style={{ padding: '7px 18px', fontSize: 13, fontWeight: 600, borderRadius: 7, background: C.blue, color: '#fff', textDecoration: 'none', marginLeft: 6 }}>
-              Sign in
-            </a>
+            <NavAuth />
           </nav>
         </div>
       </header>

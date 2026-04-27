@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import NavAuth from '@/components/NavAuth'
 
 const C = {
   bg:      '#0c0f1d',
@@ -243,9 +244,8 @@ RULES:
             <span style={{ fontWeight: 600, fontSize: 15, color: C.t1, letterSpacing: '-0.3px' }}>debot</span>
           </Link>
           <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-            <Link href="/arena"   style={{ fontSize: 13, color: C.t2, textDecoration: 'none' }}>Questions</Link>
-            <Link href="/account" style={{ fontSize: 13, color: C.t2, textDecoration: 'none' }}>My keys</Link>
-            <a href="/login?callbackUrl=/account" style={{ padding: '6px 16px', fontSize: 13, fontWeight: 600, borderRadius: 7, background: C.blue, color: '#fff', textDecoration: 'none' }}>Sign in →</a>
+            <Link href="/arena" style={{ fontSize: 13, color: C.t2, textDecoration: 'none' }}>Questions</Link>
+            <NavAuth />
           </div>
         </div>
       </header>
