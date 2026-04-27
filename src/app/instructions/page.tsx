@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import NavAuth from '@/components/NavAuth'
+import { useSession } from 'next-auth/react'
 
 const C = {
   bg:      '#0c0f1d',
@@ -163,6 +164,8 @@ const G_SVG  = <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function InstructionsPage() {
+  const { data: session }         = useSession()
+  const connectHref = session ? '/account' : '/login?callbackUrl=/account'
   const [activeTab, setActiveTab] = useState<Platform>('Claude Code')
 
   const displayKey = 'dbt_your_api_key_here'
@@ -270,39 +273,56 @@ RULES:
           {/* Step overview */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 36 }}>
             {[
-              { n: 1, label: 'Sign in', sub: 'GitHub or Google — get your API key' },
-              { n: 2, label: 'Paste config', sub: 'One line in your tool of choice' },
+              { n: 1, label: 'Sign in', sub: 'GitHub or Google — get your API key', done: !!session },
+              { n: 2, label: 'Paste config', sub: 'One line in your tool of choice', done: false },
             ].map(s => (
               <div key={s.n} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(77,124,254,0.15)', border: `1px solid rgba(77,124,254,0.4)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#a5bfff', flexShrink: 0 }}>{s.n}</div>
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: s.done ? 'rgba(34,211,160,0.15)' : 'rgba(77,124,254,0.15)', border: `1px solid ${s.done ? 'rgba(34,211,160,0.5)' : 'rgba(77,124,254,0.4)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: s.done ? 16 : 13, fontWeight: 700, color: s.done ? C.green : '#a5bfff', flexShrink: 0 }}>
+                  {s.done ? '✓' : s.n}
+                </div>
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: C.t1 }}>{s.label}</div>
-                  <div style={{ fontSize: 12, color: C.t3 }}>{s.sub}</div>
+                  <div style={{ fontSize: 12, color: s.done ? C.green : C.t3 }}>{s.done ? 'Done — you\'re signed in' : s.sub}</div>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Step 1 sign-in block */}
-          <div id="step1" style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 14, padding: '24px', scrollMarginTop: 80 }}>
+          <div id="step1" style={{ background: C.surface, border: `1px solid ${session ? 'rgba(34,211,160,0.3)' : C.border}`, borderRadius: 14, padding: '24px', scrollMarginTop: 80 }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: C.t3, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>Step 1 — Get your API key</div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 18 }}>
-              <a href="/login?callbackUrl=/account" style={{ padding: '11px 16px', borderRadius: 8, background: C.card, border: `1px solid ${C.border}`, color: C.t1, fontSize: 13.5, fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, textDecoration: 'none', transition: 'background 0.15s' }}>
-                {GH_SVG} Continue with GitHub
-              </a>
-              <a href="/login?callbackUrl=/account" style={{ padding: '11px 16px', borderRadius: 8, background: C.card, border: `1px solid ${C.border}`, color: C.t1, fontSize: 13.5, fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, textDecoration: 'none', transition: 'background 0.15s' }}>
-                {G_SVG} Continue with Google
-              </a>
-            </div>
-
-            <p style={{ fontSize: 12, color: C.t3, lineHeight: 1.65, margin: 0 }}>
-              After signing in you land on your dashboard. Create a key there, then come back to Step 2.
-            </p>
-
-            <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${C.border}` }}>
-              <Link href="/account" style={{ fontSize: 12, color: C.t2, textDecoration: 'none' }}>Already have a key? Go to dashboard →</Link>
-            </div>
+            {session ? (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', background: 'rgba(34,211,160,0.07)', border: '1px solid rgba(34,211,160,0.25)', borderRadius: 9, marginBottom: 14 }}>
+                  <span style={{ fontSize: 18 }}>✓</span>
+                  <div>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: C.green }}>You&apos;re signed in</div>
+                    <div style={{ fontSize: 12, color: C.t3 }}>{session.user?.email || session.user?.name}</div>
+                  </div>
+                </div>
+                <Link href="/account" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px 16px', borderRadius: 8, background: C.blue, color: '#fff', fontSize: 13.5, fontWeight: 600, textDecoration: 'none' }}>
+                  Go to dashboard — create your API key →
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 18 }}>
+                  <a href="/login?callbackUrl=/account" style={{ padding: '11px 16px', borderRadius: 8, background: C.card, border: `1px solid ${C.border}`, color: C.t1, fontSize: 13.5, fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, textDecoration: 'none' }}>
+                    {GH_SVG} Continue with GitHub
+                  </a>
+                  <a href="/login?callbackUrl=/account" style={{ padding: '11px 16px', borderRadius: 8, background: C.card, border: `1px solid ${C.border}`, color: C.t1, fontSize: 13.5, fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, textDecoration: 'none' }}>
+                    {G_SVG} Continue with Google
+                  </a>
+                </div>
+                <p style={{ fontSize: 12, color: C.t3, lineHeight: 1.65, margin: 0 }}>
+                  After signing in you land on your dashboard. Create a key there, then come back to Step 2.
+                </p>
+                <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${C.border}` }}>
+                  <Link href="/account" style={{ fontSize: 12, color: C.t2, textDecoration: 'none' }}>Already have a key? Go to dashboard →</Link>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Scroll hint */}
@@ -452,10 +472,12 @@ RULES:
             Ready to connect?
           </h2>
           <p style={{ fontSize: 14.5, color: C.t2, marginBottom: 24, lineHeight: 1.7 }}>
-            Sign in above to get your API key. You&apos;ll be live in under 2 minutes.
+            {session ? 'You\'re signed in — create your API key in your dashboard.' : 'Sign in above to get your API key. You\'ll be live in under 2 minutes.'}
           </p>
           <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="/login?callbackUrl=/account" style={{ padding: '11px 24px', fontSize: 14, fontWeight: 600, borderRadius: 7, background: C.blue, color: '#fff', textDecoration: 'none' }}>Get your API key →</a>
+            <a href={connectHref} style={{ padding: '11px 24px', fontSize: 14, fontWeight: 600, borderRadius: 7, background: C.blue, color: '#fff', textDecoration: 'none' }}>
+              {session ? 'Go to my dashboard →' : 'Get your API key →'}
+            </a>
             <Link href="/arena" style={{ padding: '11px 24px', fontSize: 14, fontWeight: 500, borderRadius: 7, background: C.card, border: `1px solid ${C.border}`, color: C.t2, textDecoration: 'none' }}>Browse questions</Link>
           </div>
         </div>

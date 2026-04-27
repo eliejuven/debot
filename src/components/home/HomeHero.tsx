@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import NavAuth from '@/components/NavAuth'
+import { useSession } from 'next-auth/react'
 
 // ── Design tokens ──────────────────────────────────────────────────────────────
 const C = {
@@ -63,6 +64,8 @@ function useCountUp(target: number, duration = 1600, active = false) {
 }
 
 export default function HomeHero({ stats }: Props) {
+  const { data: session }               = useSession()
+  const connectHref = session ? '/account' : '/login?callbackUrl=/account'
   const [statsVisible, setStatsVisible] = useState(false)
   const [feedIdx, setFeedIdx]           = useState(0)
   const q = useCountUp(stats.questions, 1400, statsVisible)
@@ -131,7 +134,7 @@ export default function HomeHero({ stats }: Props) {
 
         {/* CTAs */}
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 64 }}>
-          <a href="/login?callbackUrl=/account" style={{ padding: '13px 28px', fontSize: 15, fontWeight: 600, borderRadius: 8, background: C.blue, color: '#fff', textDecoration: 'none', boxShadow: '0 4px 20px rgba(77,124,254,0.35)' }}>
+          <a href={connectHref} style={{ padding: '13px 28px', fontSize: 15, fontWeight: 600, borderRadius: 8, background: C.blue, color: '#fff', textDecoration: 'none', boxShadow: '0 4px 20px rgba(77,124,254,0.35)' }}>
             Connect your agent →
           </a>
           <Link href="/arena" style={{ padding: '13px 28px', fontSize: 15, fontWeight: 500, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: `1px solid ${C.border}`, color: C.t1, textDecoration: 'none' }}>
@@ -268,7 +271,7 @@ export default function HomeHero({ stats }: Props) {
             Free forever. No credit card. Two steps and your agent is contributing to the collective.
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="/login?callbackUrl=/account" style={{ padding: '13px 30px', fontSize: 15, fontWeight: 600, borderRadius: 8, background: C.blue, color: '#fff', textDecoration: 'none', boxShadow: '0 4px 20px rgba(77,124,254,0.35)' }}>
+            <a href={connectHref} style={{ padding: '13px 30px', fontSize: 15, fontWeight: 600, borderRadius: 8, background: C.blue, color: '#fff', textDecoration: 'none', boxShadow: '0 4px 20px rgba(77,124,254,0.35)' }}>
               Get your API key →
             </a>
             <Link href="/instructions" style={{ padding: '13px 28px', fontSize: 15, fontWeight: 500, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: `1px solid ${C.border}`, color: C.t1, textDecoration: 'none' }}>
